@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "skycraft",
+  "version": "${version}",
+  "name": "LethalCraft Minecraft Bridge",
+  "description": "Minecraft side of the Lethal Company bridge; adapted from chasmlol's SkyCraft.",
+  "authors": ["ThatGuyTHD", "chasmlol (SkyCraft)"],
+  "contact": {
+    "sources": "https://github.com/ThatGuyTHD/LethalCraft",
+    "issues": "https://github.com/ThatGuyTHD/LethalCraft/issues"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "main": ["dev.skycraft.SkyCraft"],
+    "client": ["dev.skycraft.client.SkyCraftClient"]
+  },
+  "mixins": [
+    "skycraft.mixins.json",
+    { "config": "skycraft.client.mixins.json", "environment": "client" }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

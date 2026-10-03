@@ -1,0 +1,12 @@
+blastFront=20->20; native=100; dead=False
+blastBack=20->14; native=70; dead=False
+blastLowered=20->14; native=70; dead=False
+blastOutOfRange=20->20; native=100; dead=False
+blastLethalBlocked=20->20; native=100; dead=False
+meleeFront=20->20; native=100
+meleeBack=20->14; native=70
+meleeLowered=20->14; native=70
+tntEnemyDamage=100->86
+tntEnemyWhileNative=86->76
+tntPlayerDamage=20->10.38721; native=52
+complete=True

@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+**/build/
+**/.gradle/
+fabric/run*/
+launcher/payload.zip
+dist/
+mods/
+*.user
+*.log
+.DS_Store

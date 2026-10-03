@@ -1,0 +1,26 @@
+bridgeReady=True
+role=2
+world=LethalCraft_LethalCraft_MultiplayerTest_a4b46f52a8b74a0397d3705ff28598ab
+hostFixtureReady=True
+clientReport=True
+positionDifference=0
+nativeRemoteHidden=True
+hostChecked=True
+modeChecked=True
+rejoinedMinecraft=True
+rejoinReport=True
+hostLanded=True
+moonLanded=True
+interior=True
+interiorReady=True
+enemyOffered=True
+enemyMatched=True
+shieldEquipped=True
+guestShieldFront=20->20
+guestShieldBack=20->14; native=70
+tntStarted=True
+guestTntDamage=14->4.387213; native=22
+hostDone=True
+sentBytes=131421
+receivedBytes=366347
+complete=True
