@@ -69,5 +69,6 @@ static class Checks
         data.Write(0x18,0UL);Check(!host.Connected,"heartbeat loss disconnects the bridge");
         Console.WriteLine($"{passed} bridge checks passed.");
         RelayChecks.Run().GetAwaiter().GetResult();
+        LauncherChecks.Run();
     }
 }

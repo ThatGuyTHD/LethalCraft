@@ -1,7 +1,5 @@
-using Microsoft.Win32;
 using System.Diagnostics;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 
 namespace LethalCraftLauncher;
 
@@ -22,13 +20,7 @@ internal sealed class Settings
     public void Save(string root){Directory.CreateDirectory(root);File.WriteAllText(Path.Combine(root,"settings.json"),JsonSerializer.Serialize(this,new JsonSerializerOptions{WriteIndented=true}));}
     public static string FindGame()
     {
-        var candidates=new List<string>();
-        string steam=Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam","SteamPath",null) as string??@"C:\Program Files (x86)\Steam";
-        candidates.Add(Path.Combine(steam,"steamapps","common","Lethal Company"));
-        var libraries=Path.Combine(steam,"steamapps","libraryfolders.vdf");
-        if(File.Exists(libraries))foreach(Match m in Regex.Matches(File.ReadAllText(libraries),"\"path\"\\s+\"([^\"]+)\""))
-            candidates.Add(Path.Combine(m.Groups[1].Value.Replace(@"\\",@"\"),"steamapps","common","Lethal Company"));
-        return candidates.FirstOrDefault(p=>File.Exists(Path.Combine(p,"Lethal Company.exe")))??"";
+        return SteamLaunch.FindGame(SteamLaunch.Root);
     }
     public string Instance=>Path.Combine(PrismRoot,"instances","LethalCraft");
     public bool HasAccount()

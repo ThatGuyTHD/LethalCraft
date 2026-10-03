@@ -20,7 +20,7 @@ try {
     Push-Location (Join-Path $PSScriptRoot 'fabric')
     try{& ./gradlew.bat build --no-daemon --console=plain;if($LASTEXITCODE -ne 0){throw 'Minecraft build failed.'}}finally{Pop-Location}
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'lethal/bin/Release/netstandard2.1/LethalCraft.dll') -Destination (Join-Path $output 'mods') -Force
-    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'fabric/build/libs/skycraft-0.2.1-lethalcraft.jar') -Destination (Join-Path $output 'mods') -Force
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'fabric/build/libs/skycraft-0.2.2-lethalcraft.jar') -Destination (Join-Path $output 'mods') -Force
     $api=Join-Path $output 'mods/fabric-api-0.161.0+26.3.jar'
     $expected='86f16178a3cecc887a85a4cfe9a79d92fa7341d8f39b5951a4d6ad800ab657a6'
     if(!(Test-Path -LiteralPath $api) -or (Get-FileHash -LiteralPath $api -Algorithm SHA256).Hash -ne $expected){

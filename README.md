@@ -11,10 +11,10 @@ Not affiliated with Zeekerss either.
 
 You need Windows 10/11, Lethal Company installed through Steam, and a Minecraft Java Edition account that owns the game. Both games run at the same time.
 
-1. Run `LethalCraft-Setup-0.2.1.exe` and pick your Lethal Company folder.
+1. Run `LethalCraft-Setup-0.2.2.exe` and pick your Lethal Company folder.
 2. Press **Install / Update**. It sets up the mods and downloads missing tools.
 3. Press **Minecraft account** and sign in through Prism: Settings → Accounts → Add Microsoft.
-4. Press **Play**.
+4. Press **Play**. It starts Minecraft and opens Lethal Company through Steam. Sign in to Steam if it asks.
 
 Close both games before updating. Your saves stay there.
 
@@ -23,6 +23,8 @@ Close both games before updating. Your saves stay there.
 Everyone needs the same LethalCraft version and their own copies of both games.
 
 Choose **Online** for Steam friends or **LAN** for your local network. Host or join through Lethal Company. Minecraft joins the host's world automatically. For LAN, the host needs **Allow remote connections**.
+
+If Host says Steam isn't connected, quit LC, sign in to Steam and press Play again. You can still use LAN while Steam is offline.
 
 ## controls
 

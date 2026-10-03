@@ -1,4 +1,18 @@
-# 0.2.1 test results
+# Test results
+
+## 0.2.2 Online hosting fix
+
+Tested locally on Windows on 2026-10-03 with the installed Steam copy of LC.
+
+- Reproduced the disconnected-Steam state by launching LC directly with Steam closed. Online → Host → Confirm displayed the new recovery message and did not start a host. The message was checked in a game screenshot. Native startup still logs its own Steam initialization exceptions in this deliberately invalid state.
+- Started Steam and LC through Steam's app launch route. Steam initialized, and the real Online → Host → Confirm handlers created a friends-only Steam lobby and spawned the host player in the ship scene. No invitations were sent. This fixture used a separate LC save and did not start Minecraft.
+- Five launcher checks passed: secondary library paths, missing Steam, an unregistered game, a mismatched mod folder and an invalid manifest path.
+- Both mods and the installer built. The 18 bridge checks, 7 relay checks, 25 Java checks and 10 installer checks passed again.
+- Installed EXE, DLL and JAR matched the release build. All 139 original save/config files matched the fresh backup after restoring the fixture's general-settings changes and archiving its test save.
+
+This verifies native Steam host creation on this PC. A friend joining from another PC remains untested. The Minecraft relay and combat results below are from 0.2.1; their implementation did not change in 0.2.2.
+
+## 0.2.1 combat and multiplayer
 
 Tested locally on Windows on 2026-10-03. These are local development and LAN tests, not a two-PC Steam acceptance test.
 

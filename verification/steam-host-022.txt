@@ -1,0 +1,2 @@
+steamConnected=True
+PASS Online > Host > Confirm creates a Steam lobby and loads the host into the ship

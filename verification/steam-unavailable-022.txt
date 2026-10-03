@@ -1,0 +1,2 @@
+steamConnected=False
+PASS disconnected Steam produces a visible error and does not start a host

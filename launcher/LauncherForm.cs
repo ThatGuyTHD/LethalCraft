@@ -16,7 +16,7 @@ internal sealed class LauncherForm:Form
         Label TextAt(string text,int x,int y,int width,int height,float size,Color color)
         {var label=new Label{Text=text,Location=new Point(x,y),Size=new Size(width,height),Font=new Font("Segoe UI",size),ForeColor=color};Controls.Add(label);return label;}
         TextAt("LETHALCRAFT",30,24,560,44,25,Accent);
-        TextAt("Minecraft + Lethal Company     /     0.2.1",32,73,650,25,11,Muted);
+        TextAt("Minecraft + Lethal Company     /     0.2.2",32,73,650,25,11,Muted);
         TextAt("Lethal Company folder",32,121,500,25,10,Color.White);
         game.SetBounds(32,151,545,30);game.Text=settings.GameDirectory;game.BackColor=Surface;game.ForeColor=Color.White;game.BorderStyle=BorderStyle.FixedSingle;Controls.Add(game);
         ButtonAt(browse,"Browse…",590,147,99,36,false);browse.Click+=(_,_)=>{using var dialog=new OpenFileDialog{Title="Choose Lethal Company.exe",Filter="Lethal Company|Lethal Company.exe",CheckFileExists=true};if(dialog.ShowDialog(this)==DialogResult.OK)game.Text=Path.GetDirectoryName(dialog.FileName)!;};
@@ -62,6 +62,7 @@ internal sealed class LauncherForm:Form
         string exe=Path.Combine(settings.GameDirectory,"Lethal Company.exe");
         foreach(string file in new[]{exe,Path.Combine(settings.GameDirectory,"BepInEx","plugins","LethalCraft","LethalCraft.dll"),Path.Combine(settings.Instance,".minecraft","mods",SetupEngine.BridgeJar)})
             if(!File.Exists(file))throw new IOException("Some game files are missing. Press Install / Update to repair them.");
+        SteamLaunch.Validate(settings.GameDirectory,SteamLaunch.Root);
         if(!settings.HasAccount()){settings.OpenPrism();Report("Sign in through Prism: Settings → Accounts → Add Microsoft. Then press Play again.");return;}
         settings.Save(root);
         if(!MinecraftRunning())
@@ -71,7 +72,7 @@ internal sealed class LauncherForm:Form
             while(!MinecraftRunning()&&DateTime.UtcNow<until)await Task.Delay(500);
             if(!MinecraftRunning())throw new IOException("Minecraft did not start. Check Prism for a download or sign-in message, then press Play again.");
         }
-        if(!Process.GetProcessesByName("Lethal Company").Any())Process.Start(new ProcessStartInfo(exe){UseShellExecute=true,WorkingDirectory=settings.GameDirectory});
+        await SteamLaunch.Start(Report);
         Report("Both games started. Host or join through Lethal Company. E: interact · I: inventory · F7: mask.");
     }
     static bool MinecraftRunning()

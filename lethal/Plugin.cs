@@ -12,7 +12,7 @@ using UnityEngine.InputSystem;
 
 namespace LethalCraft;
 
-[BepInPlugin("local.lethalcraft.bridge", "LethalCraft", "0.2.1")]
+[BepInPlugin("local.lethalcraft.bridge", "LethalCraft", "0.2.2")]
 [BepInProcess("Lethal Company.exe")]
 [DefaultExecutionOrder(-10000)]
 public sealed class Plugin : BaseUnityPlugin
@@ -55,7 +55,8 @@ public sealed class Plugin : BaseUnityPlugin
         Instance=this;Log=Logger;savedBackground=Application.runInBackground;Application.runInBackground=true;
         try
         {
-            bool testing=Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-smoke")>=0;
+            bool steamTesting=Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-steam-test")>=0||Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-steam-unavailable-test")>=0;
+            bool testing=steamTesting||Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-smoke")>=0;
             bool normalTestLink=Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-smoke-normal-link")>=0;
             bool testGuest=testing&&Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-multiplayer-guest")>=0;
             Link=new SharedLink(testing&&!normalTestLink?Protocol.MappingName+(testGuest?"_guest":"_smoke"):Protocol.MappingName);collisions=new WorldCollision(Link);collisions.Reset(epoch);
@@ -66,6 +67,7 @@ public sealed class Plugin : BaseUnityPlugin
             saves=new SaveSlots(settings,testing);appearance=new Appearance(settings);
             multiplayer=new Network.Multiplayer(this);
             patches=new Harmony("local.lethalcraft.bridge");
+            SteamHosting.Install(patches);
             patches.Patch(AccessTools.Method(typeof(GameNetworkManager),"SaveGame"),postfix:new HarmonyMethod(typeof(Patches),nameof(Patches.Saved)));
             patches.Patch(AccessTools.Method(typeof(GameNetworkManager),"ResetSavedGameValues"),postfix:new HarmonyMethod(typeof(Patches),nameof(Patches.ResetSaved)));
             patches.Patch(AccessTools.Method(typeof(PlayerControllerB),"Update"),transpiler:new HarmonyMethod(typeof(Patches),nameof(Patches.Movement)));
@@ -86,8 +88,9 @@ public sealed class Plugin : BaseUnityPlugin
             patches.Patch(AccessTools.Method(typeof(Landmine),"SpawnExplosion"),prefix:new HarmonyMethod(typeof(Patches),nameof(Patches.Explosion)),finalizer:new HarmonyMethod(typeof(Patches),nameof(Patches.ExplosionDone)));
             foreach(var method in new[]{AccessTools.Method(typeof(EnemyAICollisionDetect),"OnTriggerStay"),AccessTools.Method(typeof(Turret),"Update"),AccessTools.Method(typeof(ShotgunItem),"ShootGun")})
                 if(method!=null)patches.Patch(method,prefix:new HarmonyMethod(typeof(Patches),nameof(Patches.Attack)),finalizer:new HarmonyMethod(typeof(Patches),nameof(Patches.AttackDone)));
-            Logger.LogInfo("LethalCraft 0.2.1 loaded. Steam/LAN multiplayer enabled. E: interact; I: inventory; F7: mask; Tab/Alt: native controls.");
+            Logger.LogInfo("LethalCraft 0.2.2 loaded. Steam/LAN multiplayer enabled. E: interact; I: inventory; F7: mask; Tab/Alt: native controls.");
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-smoke")>=0)gameObject.AddComponent<SmokeTest>();
+            if(steamTesting)gameObject.AddComponent<SteamHostRegression>();
         }
         catch(Exception e){failed=true;Logger.LogError(e);Cleanup();}
     }

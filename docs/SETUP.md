@@ -25,6 +25,10 @@ Setup archives old bridge mods outside active mod folders and preserves worlds, 
 
 Open Prism and launch the LethalCraft instance to see download or Microsoft sign-in errors. Both games need the same Windows user and privilege level. Close both before installing updates.
 
+Play starts LC through its registered Steam library entry. If Steam opens a sign-in or update screen, finish that step. The launcher checks that this is the folder containing your installed mod. Selecting a different game copy will ask you to install into the Steam folder instead.
+
+If Online → Host previously did nothing, quit LC and use the updated launcher. Older launchers started the EXE directly and could leave Steam's lobby interface uninitialized. Online hosting now displays a recovery message when Steam isn't connected. LAN remains available without an online Steam connection.
+
 Logs are `BepInEx/LogOutput.log`, the instance's `.minecraft/logs/latest.log` and the launcher's `launcher.log`. Remove private information before posting them.
 
 F8 releases the bridge for ordinary native controls. To remove the mod, close both games and move `LethalCraft.dll` out of the plugins folder. Keep the Minecraft instance if you want its worlds.
