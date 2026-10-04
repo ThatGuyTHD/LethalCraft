@@ -203,7 +203,7 @@ public final class SkyLink {
 		public int teleportSeq;
 		public int viewportW, viewportH;
 		public float gameHour;
-		public int session, saveRequest, saveFlags;
+		public int session, saveRequest, saveFlags, moonId = -1, moonCount;
 		public String worldName = "";
 		public int networkRole, connectPort;
 
@@ -291,6 +291,8 @@ public final class SkyLink {
 			out.saveRequest = s.get(JAVA_INT, b + SS_SAVE_REQUEST);
 			out.saveFlags = s.get(JAVA_INT, b + SS_SAVE_FLAGS);
 			out.worldName = readName(s, b + SS_WORLD_NAME, 96);
+			out.moonId = s.get(JAVA_INT, b + SS_MOON_ID);
+			out.moonCount = s.get(JAVA_INT, b + SS_MOON_COUNT);
 			out.networkRole = s.get(JAVA_INT, b + SS_NETWORK_ROLE);
 			out.connectPort = s.get(JAVA_INT, b + SS_CONNECT_PORT);
 			VarHandle.loadLoadFence();
@@ -334,7 +336,7 @@ public final class SkyLink {
 		public int cameraMode;
 		public float cameraDistance;
 		public float health, maxHealth;
-		public int sessionAck, saveAck, sessionError;
+		public int sessionAck, saveAck, sessionError, moonAck;
 		public int serverPort;
 	}
 
@@ -385,6 +387,7 @@ public final class SkyLink {
 		s.set(JAVA_INT, b + MS_SESSION_ACK, st.sessionAck);
 		s.set(JAVA_INT, b + MS_SAVE_ACK, st.saveAck);
 		s.set(JAVA_INT, b + MS_SESSION_ERROR, st.sessionError);
+		s.set(JAVA_INT, b + MS_MOON_ACK, st.moonAck);
 		s.set(JAVA_INT, b + MS_SERVER_PORT, st.serverPort);
 		INT.setRelease(s, b + MS_SEQ, seq + 2);
 	}

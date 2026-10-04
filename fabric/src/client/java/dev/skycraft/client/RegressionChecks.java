@@ -16,6 +16,7 @@ final class RegressionChecks {
     private static BlockPos chest;
     static void run(Minecraft mc, int check) {
         try {
+            if (check >= 60 && check <= 69) { moons(mc, check); return; }
             if (check >= 40 && check <= 59) { combat(mc, check); return; }
             if (check >= 30 && check <= 38) { multiplayer(mc, check); return; }
             if (check >= 20 && check <= 29) {
@@ -118,7 +119,7 @@ final class RegressionChecks {
         if (check == 30) {
             var server = mc.getSingleplayerServer();
             server.execute(() -> {
-                var level = server.overworld();
+                var level = dev.skycraft.world.MoonWorlds.active(server);
                 for (int x=-8;x<=4;x++) for (int z=-20;z<=-7;z++) level.setBlock(new BlockPos(x,0,z), Blocks.STONE.defaultBlockState(),3);
                 level.setBlock(marker,Blocks.DIAMOND_BLOCK.defaultBlockState(),3);
                 for (var p : server.getPlayerList().getPlayers()) {
@@ -142,7 +143,7 @@ final class RegressionChecks {
     }
     private static void multiplayerReport(Minecraft mc,int check) {
         try {
-            var server=mc.getSingleplayerServer(); var level=server==null?mc.level:server.overworld();
+            var server=mc.getSingleplayerServer(); var level=server==null?mc.level:dev.skycraft.world.MoonWorlds.active(server);
             var text=new StringBuilder("integrated=").append(server!=null).append("\nplayers=").append(level.players().size())
                 .append("\nmarker=").append(level.getBlockState(new BlockPos(-1,1,-14)).getBlock()).append('\n');
             for (var p:level.players()) {
@@ -153,5 +154,35 @@ final class RegressionChecks {
             if (server!=null) text.append("world=").append(server.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT)).append('\n');
             var folder=Path.of(System.getProperty("lethalcraft.testOutput"));Files.createDirectories(folder);Files.writeString(folder.resolve("mc-"+check+".txt"),text.toString());
         } catch(Exception e) {dev.skycraft.SkyCraft.LOG.error("Multiplayer fixture failed",e);}
+    }
+
+    private static void moons(Minecraft mc, int check) throws Exception {
+        var server=mc.getSingleplayerServer();
+        if(server==null) {
+            var folder=Path.of(System.getProperty("lethalcraft.testOutput"));Files.createDirectories(folder);
+            Files.writeString(folder.resolve("moon-"+check+".txt"),"dimension="+mc.level.dimension().identifier()+"\nmoon="+SkyClient.sky().moonId+"\nblock="+mc.level.getBlockState(new BlockPos(12,4,12)).getBlock()+"\ncount="+mc.player.getInventory().getItem(0).getCount()+"\n");
+            return;
+        }
+        server.execute(()->{
+            try {
+                var level=dev.skycraft.world.MoonWorlds.active(server);
+                var block=new BlockPos(12,4,12);var box=block.east();
+                if(check==60||check==62) {
+                    level.setBlock(block,(check==60?Blocks.DIAMOND_BLOCK:Blocks.EMERALD_BLOCK).defaultBlockState(),3);
+                    level.setBlock(box,Blocks.CHEST.defaultBlockState(),3);
+                    ((net.minecraft.world.Container)level.getBlockEntity(box)).setItem(0,new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.APPLE,check==60?11:19));
+                    if(check==60)for(var player:server.getPlayerList().getPlayers()) {
+                        player.setGameMode(GameType.CREATIVE);
+                        player.getInventory().setItem(0,new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DIAMOND,dev.skycraft.net.SkyNet.isHost(player)?13:23));
+                    }
+                }
+                var text=new StringBuilder("dimension=").append(level.dimension().identifier()).append("\nblock=").append(level.getBlockState(block).getBlock()).append('\n');
+                text.append("oldMarker=").append(level.getBlockState(new BlockPos(-1,1,-14)).getBlock()).append('\n');
+                text.append("registeredMoonDimensions=").append(java.util.stream.StreamSupport.stream(server.getAllLevels().spliterator(),false).filter(l->l.dimension().identifier().toString().startsWith("skycraft:moon_")).count()).append('\n');
+                if(level.getBlockEntity(box) instanceof net.minecraft.world.Container container)text.append("chestCount=").append(container.getItem(0).getCount()).append('\n');
+                for(var player:server.getPlayerList().getPlayers())text.append(dev.skycraft.net.SkyNet.isHost(player)?"hostCount=":"guestCount=").append(player.getInventory().getItem(0).getCount()).append(" dimension=").append(player.level().dimension().identifier()).append('\n');
+                var folder=Path.of(System.getProperty("lethalcraft.testOutput"));Files.createDirectories(folder);Files.writeString(folder.resolve("moon-"+check+".txt"),text.toString());
+            }catch(Exception e){dev.skycraft.SkyCraft.LOG.error("Moon fixture failed",e);}
+        });
     }
 }

@@ -65,7 +65,7 @@ internal sealed class Multiplayer : IDisposable
         {
             nextHello=Time.unscaledTime+1;
             Enqueue(NetworkManager.ServerClientId,new RelayFrame{Kind=RelayKind.Hello,Data=BitConverter.GetBytes(Protocol.Version)});
-            if(GuestWorld.Length==0&&Time.unscaledTime-started>15)Status="Waiting for host: everyone needs LethalCraft 0.2.2";
+            if(GuestWorld.Length==0&&Time.unscaledTime-started>15)Status="Waiting for host: everyone needs LethalCraft 0.2.3";
         }
         int budget=128*1024;
         while(budget>0&&outgoing.TryDequeue(out var entry))
@@ -83,7 +83,8 @@ internal sealed class Multiplayer : IDisposable
     void Enqueue(ulong peer,RelayFrame frame)=>outgoing.Enqueue((peer,frame));
     void Offer(ulong peer)
     {
-        bool available=plugin.Link.Connected&&plugin.SessionReady&&plugin.Minecraft.ServerPort>0;
+        // A dimension transition keeps this server and its relay connections alive.
+        bool available=plugin.Link.Connected&&hostWorld.Length>0&&plugin.Minecraft.ServerPort>0;
         Enqueue(peer,new RelayFrame{Kind=RelayKind.Offer,Epoch=epoch,Data=Encoding.ASCII.GetBytes(available?hostWorld:"")});
     }
     void Received(ulong sender,FastBufferReader reader)
@@ -130,7 +131,7 @@ internal sealed class Multiplayer : IDisposable
             var key=(sender,frame.Stream);
             if(frame.Kind==RelayKind.Open&&manager.IsServer)
             {
-                if(frame.Stream==0||!plugin.SessionReady||plugin.Minecraft.ServerPort==0||streams.Keys.Count(k=>k.Item1==sender)+connecting.Count(k=>k.Item1==sender)>=2)return;
+                if(frame.Stream==0||hostWorld.Length==0||plugin.Minecraft.ServerPort==0||streams.Keys.Count(k=>k.Item1==sender)+connecting.Count(k=>k.Item1==sender)>=2)return;
                 if(streams.ContainsKey(key)||!connecting.Add(key))return;
                 int port=(int)plugin.Minecraft.ServerPort;uint captured=epoch;
                 _=ConnectHost(sender,frame.Stream,port,captured);return;

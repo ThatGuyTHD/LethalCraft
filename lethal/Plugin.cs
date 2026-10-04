@@ -12,7 +12,7 @@ using UnityEngine.InputSystem;
 
 namespace LethalCraft;
 
-[BepInPlugin("local.lethalcraft.bridge", "LethalCraft", "0.2.2")]
+[BepInPlugin("local.lethalcraft.bridge", "LethalCraft", "0.2.3")]
 [BepInProcess("Lethal Company.exe")]
 [DefaultExecutionOrder(-10000)]
 public sealed class Plugin : BaseUnityPlugin
@@ -42,10 +42,11 @@ public sealed class Plugin : BaseUnityPlugin
     readonly Dictionary<Collider,bool> extraColliders=new();
     internal float WeaponDamageMultiplier;
     uint teleport = 1, epoch = 1;
-    int levelKey = int.MinValue;
+    int levelKey = int.MinValue, moonKey = int.MinValue;
     public bool Possessed { get; private set; }
     public bool Ready => Possessed && Minecraft.TeleportAck == teleport;
     internal bool SessionReady => saves.WorldName.Length > 0 && Minecraft.SessionAck == saves.Revision;
+    internal bool MoonReady => StartOfRound.Instance!=null&&Minecraft.MoonAck==unchecked((uint)(StartOfRound.Instance.currentLevelID+1));
     public bool MinecraftMenu => Possessed && Minecraft.MenuOpen;
     internal float Yaw, Pitch;
     public string Status { get; private set; } = "Starting bridge";
@@ -68,6 +69,7 @@ public sealed class Plugin : BaseUnityPlugin
             multiplayer=new Network.Multiplayer(this);
             patches=new Harmony("local.lethalcraft.bridge");
             SteamHosting.Install(patches);
+            IntroCredits.Install(patches);
             patches.Patch(AccessTools.Method(typeof(GameNetworkManager),"SaveGame"),postfix:new HarmonyMethod(typeof(Patches),nameof(Patches.Saved)));
             patches.Patch(AccessTools.Method(typeof(GameNetworkManager),"ResetSavedGameValues"),postfix:new HarmonyMethod(typeof(Patches),nameof(Patches.ResetSaved)));
             patches.Patch(AccessTools.Method(typeof(PlayerControllerB),"Update"),transpiler:new HarmonyMethod(typeof(Patches),nameof(Patches.Movement)));
@@ -88,7 +90,7 @@ public sealed class Plugin : BaseUnityPlugin
             patches.Patch(AccessTools.Method(typeof(Landmine),"SpawnExplosion"),prefix:new HarmonyMethod(typeof(Patches),nameof(Patches.Explosion)),finalizer:new HarmonyMethod(typeof(Patches),nameof(Patches.ExplosionDone)));
             foreach(var method in new[]{AccessTools.Method(typeof(EnemyAICollisionDetect),"OnTriggerStay"),AccessTools.Method(typeof(Turret),"Update"),AccessTools.Method(typeof(ShotgunItem),"ShootGun")})
                 if(method!=null)patches.Patch(method,prefix:new HarmonyMethod(typeof(Patches),nameof(Patches.Attack)),finalizer:new HarmonyMethod(typeof(Patches),nameof(Patches.AttackDone)));
-            Logger.LogInfo("LethalCraft 0.2.2 loaded. Steam/LAN multiplayer enabled. E: interact; I: inventory; F7: mask; Tab/Alt: native controls.");
+            Logger.LogInfo("LethalCraft 0.2.3 loaded. Steam/LAN multiplayer enabled. E: interact; I: inventory; F7: mask; Tab/Alt: native controls.");
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-smoke")>=0)gameObject.AddComponent<SmokeTest>();
             if(steamTesting)gameObject.AddComponent<SteamHostRegression>();
         }
@@ -116,13 +118,18 @@ public sealed class Plugin : BaseUnityPlugin
             if(saves.Tick(round,p,multiplayer.GuestWorld)){epoch++;collisions.Reset(epoch);world.Clear();controls.Release();Reanchor();}
             bool loading=round!=null&&(round.newGameIsLoading||round.beganLoadingNewLevel||(!round.inShipPhase&&!round.shipHasLanded)||round.travellingToNewLevel||round.shipIsLeaving||round.suckingPlayersOutOfShip);
             int newKey=round==null?0:unchecked(round.currentLevelID*397^round.randomMapSeed);
-            if(newKey!=levelKey){levelKey=newKey;epoch++;collisions.Reset(epoch);Reanchor();}
+            int newMoon=round==null?-1:round.currentLevelID;
+            if(newKey!=levelKey||newMoon!=moonKey)
+            {
+                if(newMoon!=moonKey)world.Clear();
+                levelKey=newKey;moonKey=newMoon;epoch++;collisions.Reset(epoch);Reanchor();
+            }
             bool native= !playable||loading||nativeMode||keyboard?.leftAltKey.isPressed==true
                 ||(p!=null&&(p.inTerminalMenu||p.isTypingChat||p.inSpecialInteractAnimation||p.isClimbingLadder||p.inAnimationWithEnemy!=null||p.quickMenuManager.isMenuOpen));
             if(native!=suspended){suspended=native;Reanchor();controls.Release();}
-            Possessed=enabledByUser&&valid&&Minecraft.InWorld&&SessionReady&&!native;
+            Possessed=enabledByUser&&valid&&Minecraft.InWorld&&SessionReady&&MoonReady&&!native;
             multiplayer.PublishMode(Possessed);
-            minecraftView=enabledByUser&&valid&&Minecraft.InWorld&&SessionReady&&playable&&!loading&&!nativeMode
+            minecraftView=enabledByUser&&valid&&Minecraft.InWorld&&SessionReady&&MoonReady&&playable&&!loading&&!nativeMode
                 &&keyboard?.leftAltKey.isPressed!=true&&p!=null&&!p.inTerminalMenu&&!p.isTypingChat&&!p.quickMenuManager.isMenuOpen;
             if(Possessed!=previouslyPossessed)
             {
@@ -151,16 +158,16 @@ public sealed class Plugin : BaseUnityPlugin
             int w=Math.Min(Screen.width,1920),h=Math.Max(1,Mathf.RoundToInt(w*(float)Screen.height/Math.Max(1,Screen.width)));
             Link.PublishHost(flags,unchecked((uint)levelKey),epoch,mc.x,mc.y,mc.z,Yaw,Pitch,teleport,w,h,
                 session:saves.Revision,saveRequest:saves.SaveRequest,saveFlags:saves.Flags,worldName:saves.WorldName,
-                networkRole:multiplayer.Role,connectPort:(uint)multiplayer.LocalPort);
+                networkRole:multiplayer.Role,connectPort:(uint)multiplayer.LocalPort,moonId:round==null?-1:round.currentLevelID,moonCount:round==null?0:round.levels.Length);
             if(Link.Connected)
             {
                 Link.ReadRender(world.Receive,512);world.Flush();world.UpdateOverlay(Link);
-                Link.ReadEvents(e=>{if(SessionReady&&(Possessed||e.Type==1||e.Type==3))combat.Event(e);});
+                Link.ReadEvents(e=>{if(SessionReady&&MoonReady&&(Possessed||e.Type==1||e.Type==3))combat.Event(e);});
                 world.PositionAvatar(Minecraft);
             }
-            world.Visible(enabledByUser&&valid&&Minecraft.InWorld&&SessionReady&&playable);
+            world.Visible(enabledByUser&&valid&&Minecraft.InWorld&&SessionReady&&MoonReady&&playable);
             Status=saves.Error.Length>0?saves.Error:Minecraft.SessionError!=0?"Minecraft connection/save failed; see Minecraft log":!enabledByUser?"Bridge off · F8 to enable":!Link.Connected?"Waiting for Minecraft":!SessionReady||!Minecraft.InWorld?(multiplayer.Role==2?multiplayer.Status:"Opening Minecraft save slot"):
-                native?"Lethal Company controls · Tab to switch":!Ready?"Loading collision": "Minecraft controls · E interact · I inventory · Alt: Lethal Company";
+                !MoonReady?"Changing Minecraft moon dimension":native?"Lethal Company controls · Tab to switch":!Ready?"Loading collision": "Minecraft controls · E interact · I inventory · Alt: Lethal Company";
             Link.Write32(0x80,(Possessed?1u:0u)|(Ready?2u:0u)|(valid?4u:0u)|(native?8u:0u));
         }
         catch(Exception e)

@@ -94,6 +94,8 @@ internal static class MultiplayerRegression
         bool flash=false;float end=Time.realtimeSinceStartup+45;
         while(!File.Exists(Path.Combine(other,"arrow-done"))&&Time.realtimeSinceStartup<end){flash|=enemy.GetComponent<HitFlash>()?.Showing==true;yield return null;}
         Note("guestArrowReplicatedDamage",enemy.enemyHP<10);Note("hostEnemyHpAfter",enemy.enemyHP);Note("hostRedFlash",flash);
+        // Arrow hits can wake the bug. Keep its later contact attacks out of the blast fixture.
+        foreach(var collider in enemy.GetComponentsInChildren<Collider>())collider.enabled=false;
         plugin.Link.Input(90,45);yield return new WaitForSecondsRealtime(2);Mark("shield-equipped");
         yield return Wait(()=>File.Exists(Path.Combine(other,"shield-done")),"guestShieldComplete");
         plugin.Link.Input(90,59);yield return new WaitForSecondsRealtime(1);
@@ -114,18 +116,24 @@ internal static class MultiplayerRegression
         Vector3 position=enemy.transform.position+Vector3.right*2;
         if(UnityEngine.AI.NavMesh.SamplePosition(position,out var nav,3,UnityEngine.AI.NavMesh.AllAreas))position=nav.position;
         Plugin.LocalPlayer!.TeleportPlayer(position);yield return new WaitForSecondsRealtime(7);
-        yield return RegressionTest.ArrowCheck(plugin,enemy,output);Mark("arrow-done");
+        yield return RegressionTest.ArrowCheck(plugin,enemy,output);
+        foreach(var collider in enemy.GetComponentsInChildren<Collider>())collider.enabled=false;
+        Mark("arrow-done");
         yield return Wait(()=>File.Exists(Path.Combine(other,"shield-equipped")),"shieldEquipped");
         plugin.Yaw=0;plugin.Pitch=0;yield return new WaitForSecondsRealtime(1);
         plugin.Link.Input(2,3,1);yield return new WaitForSecondsRealtime(.7f);
         float health=plugin.Minecraft.Health;
         Landmine.SpawnExplosion(Plugin.LocalPlayer.transform.position+Vector3.forward*2,false,0,5,30);
         yield return new WaitForSecondsRealtime(1);Note("guestShieldFront",$"{health}->{plugin.Minecraft.Health}");
+        if(Math.Abs(health-plugin.Minecraft.Health)>.01f)throw new InvalidOperationException("Front shield did not preserve health");
         Landmine.SpawnExplosion(Plugin.LocalPlayer.transform.position-Vector3.forward*2,false,0,5,30);
         yield return new WaitForSecondsRealtime(1);Note("guestShieldBack",$"{health}->{plugin.Minecraft.Health}; native={Plugin.LocalPlayer.health}");
+        if(Math.Abs(plugin.Minecraft.Health-(health-6))>.01f)throw new InvalidOperationException("Rear blast damage was incorrect");
         plugin.Link.Input(2,3,0);Mark("shield-done");
         yield return Wait(()=>File.Exists(Path.Combine(other,"tnt-started")),"tntStarted");
         health=plugin.Minecraft.Health;yield return new WaitForSecondsRealtime(3);
-        Note("guestTntDamage",$"{health}->{plugin.Minecraft.Health}; native={Plugin.LocalPlayer.health}");Mark("tnt-done");
+        Note("guestTntDamage",$"{health}->{plugin.Minecraft.Health}; native={Plugin.LocalPlayer.health}");
+        if(plugin.Minecraft.Health>=health||Plugin.LocalPlayer.isPlayerDead)throw new InvalidOperationException("TNT fixture did not deal expected nonlethal damage");
+        Mark("tnt-done");
     }
 }

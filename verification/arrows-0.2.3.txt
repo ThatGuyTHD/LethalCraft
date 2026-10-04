@@ -1,0 +1,4 @@
+arrowEnemyHpBefore=10
+arrowEnemyHpAfter=8
+arrowDamagedEnemy=True
+redHitFlash=True

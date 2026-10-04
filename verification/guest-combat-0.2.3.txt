@@ -1,0 +1,2 @@
+health=14.0
+shieldDamage=7

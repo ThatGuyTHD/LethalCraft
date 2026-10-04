@@ -1,5 +1,20 @@
 # Test results
 
+## 0.2.3 moon dimensions and intro credit
+
+Tested locally on Windows on 2026-10-03, using isolated saves.
+
+- Two LC processes and two Minecraft clients travelled between two native moons. Each moon kept its own blocks and chest contents (11 apples on the first, 19 on the second). The host and guest kept their separate carried inventories. Returning restored the first moon's build.
+- Travel kept the same Minecraft server port and relay session. Both moons' builds, containers and the host inventory survived a server restart.
+- A separate two-client run verified guest reconnect and retained inventory, native-body visibility, landing and interior travel. Guest arrows reduced native enemy HP 10 → 8 and flashed red on both sides. Front shields preserved health 20 → 20 with durability cost 7; rear blasts dealt 20 → 14. TNT dealt 14 → 4.387, with native health 22. The arrow target's contact colliders were disabled after the arrow check to keep later monster attacks out of the shield measurements.
+- Changing the dungeon seed on the same moon retained the build's native collision. A genuine pre-update world copy retained its existing Overworld build on the first moon opened; another moon started empty. Returning retained both the old build and a new chest. All 13 installed native levels had registered dimensions.
+- The intro screenshot showed `Made By ThatGuy` below the boot text, labelled LethalCraft and without covering the original text.
+- 19 bridge checks, 7 relay checks, 5 launcher checks and 29 Java checks passed. All 10 installer checks passed for 0.2.3 and both privacy rebuilds of the older releases.
+- The privacy audit checked Git history, release ZIP/JAR files, compressed .NET bundles and embedded installer payloads. Older releases contained local Windows build paths in compiler metadata; the rebuilt copies passed. A positive control against an original installer detected the paths in the outer executable, bundled launcher and embedded mod.
+- Installed 0.2.3 locally. All 139 original save/config files matched the fresh backup after restoring test-modified general settings and archiving test saves. The Minecraft account file's hash was unchanged.
+
+This verifies two local clients and selected moons, not a two-PC Steam session or every moon/mod combination. Existing shared builds cannot be assigned to their original moons retrospectively; the first moon opened after updating inherits them once.
+
 ## 0.2.2 Online hosting fix
 
 Tested locally on Windows on 2026-10-03 with the installed Steam copy of LC.

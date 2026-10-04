@@ -45,7 +45,7 @@ New-Item -ItemType Directory -Path (Join-Path $profileDirectory '.minecraft\mods
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'prism\mmc-pack.json') -Destination $profileDirectory -Force
 # Keep one bridge jar loaded. Archive older managed versions outside the mods directory.
 $oldJars=Get-ChildItem -LiteralPath (Join-Path $profileDirectory '.minecraft\mods') -Filter 'skycraft-*-lethalcraft.jar' |
-    Where-Object Name -ne 'skycraft-0.2.2-lethalcraft.jar'
+    Where-Object Name -ne 'skycraft-0.2.3-lethalcraft.jar'
 if($oldJars){
     $jarBackup=Join-Path $profileDirectory ('lethalcraft-backups\'+(Get-Date -Format 'yyyyMMdd-HHmmssfff'))
     New-Item -ItemType Directory -Path $jarBackup -Force | Out-Null
@@ -60,5 +60,5 @@ if(!(Test-Path -LiteralPath $cfg)){
     $instanceText=$instanceText.Replace('JAVA_PATH_HERE',$JavaPath.Replace('\','/'))
     Set-Content -LiteralPath $cfg -Value $instanceText -Encoding UTF8
 }
-'{"package":"LethalCraft","version":"0.2.2"}' | Set-Content -LiteralPath (Join-Path $profileDirectory 'lethalcraft-managed.json') -Encoding UTF8
+'{"package":"LethalCraft","version":"0.2.3"}' | Set-Content -LiteralPath (Join-Path $profileDirectory 'lethalcraft-managed.json') -Encoding UTF8
 Write-Output 'Installed. Run Launch LethalCraft.cmd. Sign into your Minecraft account in Prism if requested.'

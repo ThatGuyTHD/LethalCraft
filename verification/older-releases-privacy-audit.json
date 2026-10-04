@@ -1,0 +1,10 @@
+{
+  "checks": {
+    "contents": 3647,
+    "zip_entries": 3596,
+    "bundle_entries": 896,
+    "managed_resources": 2,
+    "git_blobs": 171
+  },
+  "findings": []
+}

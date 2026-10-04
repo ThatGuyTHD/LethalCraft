@@ -77,7 +77,9 @@ public final class SkyCombat {
 			removeAll();
 			return;
 		}
-		ServerLevel level = players.getFirst().level();
+		ServerLevel level = dev.skycraft.world.MoonWorlds.active(server);
+		if (level == null) { removeAll(); return; }
+		if (PROXIES.values().stream().anyMatch(proxy -> proxy.level() != level)) removeAll();
 		// Move the targets before arrows simulate, rather than leaving projectile collision a tick behind.
 		if (SkyLink.readActors(ACTORS)) {
 			sync(level);

@@ -20,6 +20,11 @@ import net.minecraft.server.level.ServerPlayer;
  * host's server through these packets instead.
  */
 public final class SkyNet {
+	public record Moon(int moon, String dimension) implements CustomPacketPayload {
+		public static final Type<Moon> TYPE = new Type<>(Identifier.fromNamespaceAndPath(SkyCraft.MOD_ID, "lc_moon"));
+		public static final StreamCodec<RegistryFriendlyByteBuf, Moon> CODEC = StreamCodec.composite(ByteBufCodecs.INT, Moon::moon, ByteBufCodecs.stringUtf8(64), Moon::dimension, Moon::new);
+		@Override public Type<? extends CustomPacketPayload> type() { return TYPE; }
+	}
 	private static final java.util.Map<java.util.UUID, Boolean> presentations = new java.util.HashMap<>();
 	public record Hit(int actor, float damage, float x, float z, int flags, int weapon) implements CustomPacketPayload {
 		public static final Type<Hit> TYPE = new Type<>(Identifier.fromNamespaceAndPath(SkyCraft.MOD_ID, "lc_hit"));
@@ -109,6 +114,7 @@ public final class SkyNet {
 	}
 
 	public static void init() {
+		PayloadTypeRegistry.clientboundPlay().register(Moon.TYPE, Moon.CODEC);
 		PayloadTypeRegistry.clientboundPlay().register(Hit.TYPE, Hit.CODEC);
 		PayloadTypeRegistry.clientboundPlay().register(ViewMode.TYPE, ViewMode.CODEC);
 		PayloadTypeRegistry.serverboundPlay().register(Presentation.TYPE, Presentation.CODEC);

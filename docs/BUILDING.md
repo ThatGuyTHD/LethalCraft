@@ -13,3 +13,11 @@ The script builds both mods, runs the bridge/relay and Java checks, fetches the 
 Game integration tests are opt-in: `--lethalcraft-smoke --lethalcraft-combat` or the multiplayer host/guest switches, paired with a Fabric development launch and `-Dlethalcraft.verify=true`. The two-client fixture additionally uses `-Dlethalcraft.testOffline=true`; that setting is ignored outside Fabric's development environment. Normal installed play uses Minecraft authentication. Test saves must be isolated and the user's games must be closed first.
 
 GitHub excludes build output, game files, local test worlds, logs and the generated installer payload. The release ZIP includes the source but no decompiled game code or game libraries.
+
+Before sharing a release, audit its full contents and Git history with Python 3:
+
+```powershell
+python tools/privacy_audit.py --git . path/to/LethalCraft-Setup-0.2.3.exe path/to/LethalCraft-0.2.3.zip --report audit.json
+```
+
+The scanner reports categories and locations without printing matched values. It expands ZIP/JAR archives, compressed .NET bundles and embedded installer payloads. It is one check alongside reviewing the files and images being shared, not a guarantee that every possible secret can be recognized. `Directory.Build.props` disables debug symbols and maps compiler paths so build machines' profile paths stay out of the binaries.

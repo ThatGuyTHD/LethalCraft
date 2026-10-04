@@ -9,7 +9,7 @@ $required=@(
     (Join-Path $GameDirectory 'Lethal Company.exe'),
     (Join-Path $GameDirectory 'BepInEx\plugins\LethalCraft\LethalCraft.dll'),
     (Join-Path $GameDirectory 'winhttp.dll'),
-    (Join-Path $profileDirectory '.minecraft\mods\skycraft-0.2.2-lethalcraft.jar'),
+    (Join-Path $profileDirectory '.minecraft\mods\skycraft-0.2.3-lethalcraft.jar'),
     (Join-Path $profileDirectory '.minecraft\mods\fabric-api-0.161.0+26.3.jar'),
     $PrismExe
 )

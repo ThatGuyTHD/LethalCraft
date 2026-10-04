@@ -1,0 +1,11 @@
+PASS fresh setup installs pinned Prism and Java without global dependencies
+PASS fresh setup installs verified BepInEx
+PASS required loader setting enabled
+PASS Minecraft bridge installed
+PASS repair preserves existing worlds
+PASS repair preserves account data
+PASS repair preserves mask and save configuration
+PASS upgrade archives old bridge outside mods folder
+PASS settings persist and missing account detected
+PASS archive path traversal rejected
+10 installer checks passed. Game files in this fixture are placeholders; no game launch was simulated.

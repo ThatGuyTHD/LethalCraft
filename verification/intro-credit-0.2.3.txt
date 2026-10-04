@@ -1,0 +1,2 @@
+text=<size=60%>LETHALCRAFT</size> / Made By ThatGuy
+active=True

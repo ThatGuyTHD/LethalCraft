@@ -15,8 +15,9 @@ static class Checks
         using var host=new SharedLink(name);
         using var peer=MemoryMappedFile.OpenExisting(name);
         using var data=peer.CreateViewAccessor();
-        Check(data.ReadUInt32(0)==Protocol.Magic&&data.ReadUInt32(4)==15,"v15 handshake and allocated layout");
-        host.PublishHost(1,7,1,0,0,0,0,0,1,1280,720,session:12,saveRequest:5,saveFlags:1,worldName:"LethalCraft_A_123",networkRole:2,connectPort:23456);
+        Check(data.ReadUInt32(0)==Protocol.Magic&&data.ReadUInt32(4)==16,"v16 handshake and allocated layout");
+        host.PublishHost(1,7,1,0,0,0,0,0,1,1280,720,session:12,saveRequest:5,saveFlags:1,worldName:"LethalCraft_A_123",networkRole:2,connectPort:23456,moonId:3,moonCount:13);
+        Check(data.ReadInt32(Protocol.HostState+0xB8)==3&&data.ReadInt32(Protocol.HostState+0xBC)==13,"moon identity and catalog count travel in the host snapshot");
         Check(data.ReadUInt32(Protocol.HostState+0xB0)==2&&data.ReadUInt32(Protocol.HostState+0xB4)==23456,"guest role and loopback port travel atomically with save identity");
         Check(data.ReadUInt32(Protocol.HostState+0x40)==12&&data.ReadUInt32(Protocol.HostState+0x44)==5&&data.ReadByte(Protocol.HostState+0x50)=='L',"world identity and save requests travel inside host snapshot");
         host.PublishHost(0,0,1,0,0,0,0,0,1,1280,720,session:13);

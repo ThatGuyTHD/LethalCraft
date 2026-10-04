@@ -8,7 +8,7 @@ public final class Proto {
 	}
 
 	public static final int MAGIC = 0x43594B53;
-	public static final int VERSION = 15;
+	public static final int VERSION = 16;
 	// A second client on the same PC (multiplayer testing) talks to its own stand-in Skyrim:
 	// -Dskycraft.link=Local\SkyCraft_guest (see tools/fake_guest.py).
 	public static final String MAPPING_NAME = System.getProperty("skycraft.link", "Local\\LethalCraft_v1");
@@ -150,6 +150,7 @@ public final class Proto {
 	public static final long SS_GAME_HOUR = 0x3C;
 	public static final long SS_SESSION = 0x40, SS_SAVE_REQUEST = 0x44, SS_SAVE_FLAGS = 0x48, SS_WORLD_NAME = 0x50;
 	public static final long SS_NETWORK_ROLE = 0xB0, SS_CONNECT_PORT = 0xB4;
+	public static final long SS_MOON_ID = 0xB8, SS_MOON_COUNT = 0xBC, MS_MOON_ACK = 0xE4;
 
 	public static final int SKY_IN_GAME = 1;
 	public static final int SKY_MENU_OPEN = 1 << 1;

@@ -16,7 +16,7 @@ internal sealed class LauncherForm:Form
         Label TextAt(string text,int x,int y,int width,int height,float size,Color color)
         {var label=new Label{Text=text,Location=new Point(x,y),Size=new Size(width,height),Font=new Font("Segoe UI",size),ForeColor=color};Controls.Add(label);return label;}
         TextAt("LETHALCRAFT",30,24,560,44,25,Accent);
-        TextAt("Minecraft + Lethal Company     /     0.2.2",32,73,650,25,11,Muted);
+        TextAt("Minecraft + Lethal Company     /     0.2.3",32,73,650,25,11,Muted);
         TextAt("Lethal Company folder",32,121,500,25,10,Color.White);
         game.SetBounds(32,151,545,30);game.Text=settings.GameDirectory;game.BackColor=Surface;game.ForeColor=Color.White;game.BorderStyle=BorderStyle.FixedSingle;Controls.Add(game);
         ButtonAt(browse,"Browse…",590,147,99,36,false);browse.Click+=(_,_)=>{using var dialog=new OpenFileDialog{Title="Choose Lethal Company.exe",Filter="Lethal Company|Lethal Company.exe",CheckFileExists=true};if(dialog.ShowDialog(this)==DialogResult.OK)game.Text=Path.GetDirectoryName(dialog.FileName)!;};

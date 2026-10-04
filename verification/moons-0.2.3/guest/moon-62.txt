@@ -1,0 +1,4 @@
+dimension=skycraft:moon_2
+moon=2
+block=Block{minecraft:emerald_block}
+count=23

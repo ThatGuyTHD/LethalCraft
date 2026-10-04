@@ -37,9 +37,11 @@ internal sealed class SmokeTest : MonoBehaviour
         bool multiplayer=guest||Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-multiplayer-host")>=0;
         if(multiplayer)
         {
-            GameNetworkManager.Instance.currentSaveFileName="LethalCraft_MultiplayerTest";
+            bool moons=Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-moons")>=0;
+            GameNetworkManager.Instance.currentSaveFileName=moons?"LethalCraft_MoonTest":"LethalCraft_MultiplayerTest";
             if(guest)menu.StartAClient();else{menu.LAN_HostSetLocal();GameNetworkManager.Instance.StartHost();}
-            yield return MultiplayerRegression.Run(Plugin.Instance,output,guest);
+            if(moons)yield return MoonRegression.Run(Plugin.Instance,output,guest);
+            else yield return MultiplayerRegression.Run(Plugin.Instance,output,guest);
             yield return new WaitForSecondsRealtime(2);Application.Quit();yield break;
         }
         GameNetworkManager.Instance.currentSaveFileName=slots?"LethalCraft_SlotTest_A":"LethalCraft_SmokeTest";

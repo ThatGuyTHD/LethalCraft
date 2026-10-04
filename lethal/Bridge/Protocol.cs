@@ -7,7 +7,7 @@ namespace LethalCraft.Bridge;
 public static class Protocol
 {
     public const string MappingName = "Local\\LethalCraft_v1";
-    public const uint Magic = 0x43594B53, Version = 15;
+    public const uint Magic = 0x43594B53, Version = 16;
     public const long HostState = 0x100, McState = 0x200, OverlayControl = 0x300, OverlayHeaders = 0x340;
     public const long Input = 0x1000, Actors = 0x12000, Events = 0x17000, Entities = 0x1C000, Collision = 0x20000;
     public const long CollisionBytes = 32L << 20;
@@ -21,7 +21,7 @@ public static class Protocol
 
 public struct PlayerState
 {
-    public uint Flags, TeleportAck, SessionAck, SaveAck, SessionError, ServerPort;
+    public uint Flags, TeleportAck, SessionAck, SaveAck, SessionError, ServerPort, MoonAck;
     public double X, Y, Z, EyeX, EyeY, EyeZ;
     public float Yaw, Pitch, EyeHeight, Sensitivity, Fov, BobPhase, BobAmount, CameraDistance, Health, MaxHealth;
     public uint CameraMode;

@@ -9,3 +9,13 @@ mods/
 *.user
 *.log
 .DS_Store
+**/accounts.json
+**/settings.json
+**/saves/
+**/.env
+**/.env.*
+**/*.pdb
+**/*.dmp
+**/*.key
+**/*.pem
+**/launcher.log

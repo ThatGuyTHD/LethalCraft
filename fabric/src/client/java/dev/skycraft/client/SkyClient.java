@@ -264,7 +264,7 @@ public final class SkyClient {
 		if (!linked || player == null) {
 			return;
 		}
-		if (!sky.inGame() || sky.loading()) {
+		if (!sky.inGame() || sky.loading() || !MirrorWorld.ready(minecraft)) {
 			// Skyrim is on its main menu or a loading screen: park the player where they are.
 			if (holdPos == null) {
 				holdPos = player.position();

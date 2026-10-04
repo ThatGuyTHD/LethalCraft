@@ -53,6 +53,9 @@ public final class MirrorWorld {
 	}
 
 	public static boolean ready(Minecraft minecraft) {
+		return loaded(minecraft) && MoonClient.ready(minecraft);
+	}
+	private static boolean loaded(Minecraft minecraft) {
 		if (error != 0 || worldName.isEmpty() || minecraft.player == null || minecraft.level == null) return false;
 		var server = minecraft.getSingleplayerServer();
 		if (server == null) return SkyClient.sky().networkRole == 2 && mcAddress(minecraft).equals("127.0.0.1:" + connectPort);
@@ -60,7 +63,8 @@ public final class MirrorWorld {
 	}
 
 	public static void report(Minecraft minecraft, SkyLink.McState state) {
-		state.sessionAck = ready(minecraft) ? session : 0;
+		state.sessionAck = loaded(minecraft) ? session : 0;
+		state.moonAck = MoonClient.ack(minecraft);
 		state.saveAck = saveAck;
 		state.sessionError = error;
 		state.serverPort = MultiplayerClient.port(minecraft);
@@ -150,7 +154,13 @@ public final class MirrorWorld {
 				error = 1; SkyCraft.LOG.error("LethalCraft: legacy import failed; original preserved, not opening an empty replacement", e); return;
 			}
 		}
-		if (minecraft.getLevelSource().levelExists(worldName)) {
+		boolean existing = minecraft.getLevelSource().levelExists(worldName);
+		try {
+			dev.skycraft.world.MoonLayout.prepare(minecraft.gameDirectory.toPath().resolve("saves").resolve(worldName), host.moonId, host.moonCount);
+		} catch (java.io.IOException e) {
+			error = 4; SkyCraft.LOG.error("LethalCraft: cannot prepare moon dimensions; existing world preserved", e); return;
+		}
+		if (existing) {
 			SkyCraft.LOG.info("SkyCraft: opening mirror world");
 			minecraft.createWorldOpenFlows().openWorld(worldName, () -> minecraft.gui.setScreen(title));
 			return;

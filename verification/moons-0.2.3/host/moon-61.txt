@@ -1,0 +1,6 @@
+dimension=skycraft:moon_2
+block=Block{minecraft:air}
+oldMarker=Block{minecraft:air}
+registeredMoonDimensions=13
+hostCount=13 dimension=skycraft:moon_2
+guestCount=23 dimension=skycraft:moon_2

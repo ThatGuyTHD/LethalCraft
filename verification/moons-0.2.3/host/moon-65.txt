@@ -1,0 +1,6 @@
+dimension=skycraft:moon_2
+block=Block{minecraft:emerald_block}
+oldMarker=Block{minecraft:air}
+registeredMoonDimensions=13
+chestCount=19
+hostCount=13 dimension=skycraft:moon_2

@@ -1,0 +1,4 @@
+dimension=skycraft:moon_1
+moon=1
+block=Block{minecraft:diamond_block}
+count=23

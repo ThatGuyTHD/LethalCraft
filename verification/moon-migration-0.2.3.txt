@@ -1,0 +1,14 @@
+PASS bridge ready
+PASS Minecraft snapshot 66
+PASS old shared Overworld and existing build are retained on the first moon
+PASS every native moon has a registered dimension
+PASS Minecraft snapshot 60
+PASS native routing available
+PASS host dimension ready 2
+PASS Minecraft snapshot 61
+PASS migration does not copy old builds onto another moon
+PASS native routing available
+PASS host dimension ready 1
+PASS Minecraft snapshot 63
+PASS return preserves both the migrated build and new chest
+PASS legacy migration regression complete

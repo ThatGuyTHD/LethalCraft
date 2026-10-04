@@ -1,0 +1,21 @@
+PASS bridge ready
+PASS host phase 60
+PASS guest followed native moon 1
+PASS Minecraft snapshot 60
+PASS guest inventory travels with player 60
+PASS guest sees correct moon blocks 60
+PASS host phase 61
+PASS guest followed native moon 2
+PASS Minecraft snapshot 61
+PASS guest inventory travels with player 61
+PASS guest sees correct moon blocks 61
+PASS host phase 62
+PASS guest followed native moon 2
+PASS Minecraft snapshot 62
+PASS guest inventory travels with player 62
+PASS guest sees correct moon blocks 62
+PASS host phase 63
+PASS guest followed native moon 1
+PASS Minecraft snapshot 63
+PASS guest inventory travels with player 63
+PASS guest sees correct moon blocks 63

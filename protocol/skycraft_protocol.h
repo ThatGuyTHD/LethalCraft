@@ -14,7 +14,7 @@
 namespace skycraft::proto
 {
 	inline constexpr std::uint32_t kMagic = 0x43594B53;  // "SKYC"
-	inline constexpr std::uint32_t kVersion = 15;
+	inline constexpr std::uint32_t kVersion = 16;
 	inline constexpr wchar_t       kMappingName[] = L"Local\\LethalCraft_v1";
 
 	// One Minecraft block is one Unity metre. Unity X is reflected at the adapter boundary.
@@ -90,8 +90,9 @@ namespace skycraft::proto
 		std::uint32_t session, saveRequest, saveFlags, pad4C;
 		char          worldName[96];  // ASCII save folder, empty on native main menu
 		std::uint32_t networkRole, connectPort; // 0 offline, 1 host, 2 guest; loopback relay port
+        std::int32_t moonId, moonCount; // stable native moon index, not dungeon seed
 	};
-	static_assert(sizeof(SkyState) == 0xB8);
+	static_assert(sizeof(SkyState) == 0xC0);
 
 	// ---- MC -> Skyrim state @0x200 (seqlock) ------------------------------------------------
 	enum McFlags : std::uint32_t
@@ -141,7 +142,7 @@ namespace skycraft::proto
 		float         cameraDistance;
 		float         health, maxHealth;
 		std::uint32_t sessionAck, saveAck, sessionError, padDC;
-		std::uint32_t serverPort, padE4; // authenticated Minecraft listener (loopback only)
+		std::uint32_t serverPort, moonAck; // listener; loaded native moon index + 1 (0 = transitioning)
 	};
 	static_assert(sizeof(McState) == 0xE8);
 	static_assert(sizeof(McState) <= 0x100);

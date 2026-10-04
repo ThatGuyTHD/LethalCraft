@@ -54,7 +54,7 @@ public sealed unsafe class SharedLink : IDisposable
 
     public void PublishHost(uint flags, uint world, uint epoch, double x, double y, double z,
         float yaw, float pitch, uint teleport, int width, int height, float hour = 12,
-        uint session = 0, uint saveRequest = 0, uint saveFlags = 0, string worldName = "", uint networkRole = 0, uint connectPort = 0)
+        uint session = 0, uint saveRequest = 0, uint saveFlags = 0, string worldName = "", uint networkRole = 0, uint connectPort = 0, int moonId = -1, int moonCount = 0)
     {
         if(worldName.Length>=96)throw new ArgumentOutOfRangeException(nameof(worldName));
         foreach(char c in worldName)if(!(c>='a'&&c<='z'||c>='A'&&c<='Z'||c>='0'&&c<='9'||c=='_'||c=='-'))throw new ArgumentException("Invalid world name",nameof(worldName));
@@ -70,6 +70,7 @@ public sealed unsafe class SharedLink : IDisposable
         Write32(b + 0x40,session);Write32(b + 0x44,saveRequest);Write32(b + 0x48,saveFlags);
         for(int i=0;i<96;i++)memory[b+0x50+i]=i<worldName.Length?(byte)worldName[i]:(byte)0;
         Write32(b+0xB0,networkRole);Write32(b+0xB4,connectPort);
+        Write32(b+0xB8,unchecked((uint)moonId));Write32(b+0xBC,unchecked((uint)moonCount));
         Thread.MemoryBarrier(); Write32(b, seq + 2);
     }
 
@@ -94,6 +95,7 @@ public sealed unsafe class SharedLink : IDisposable
             s.Health = *(float*)(memory + b + 200); s.MaxHealth = *(float*)(memory + b + 204);
             s.SessionAck=Read32(b+0xD0);s.SaveAck=Read32(b+0xD4);s.SessionError=Read32(b+0xD8);
             s.ServerPort=Read32(b+0xE0);
+            s.MoonAck=Read32(b+0xE4);
             Thread.MemoryBarrier();
             if (seq == Read32(b)) return s.Valid;
         }

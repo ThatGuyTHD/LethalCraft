@@ -1,0 +1,31 @@
+PASS bridge ready
+PASS guest joined
+PASS Minecraft snapshot 60
+PASS guest verified phase 60
+PASS first moon build has native collision
+PASS new dungeon seed does not clear same-moon builds
+PASS native routing available
+PASS host dimension ready 2
+PASS Minecraft snapshot 61
+PASS second moon has no first-moon blocks or chest
+PASS both player inventories survive travel
+PASS guest verified phase 61
+PASS Minecraft snapshot 62
+PASS guest verified phase 62
+PASS native routing available
+PASS host dimension ready 1
+PASS Minecraft snapshot 63
+PASS return restores first-moon build and chest
+PASS moon travel keeps Minecraft server and relay connected
+PASS guest verified phase 63
+PASS guest checks complete
+PASS returned to menu
+PASS reopened saved campaign
+PASS save identity survived reopening
+PASS Minecraft snapshot 64
+PASS first moon and inventory survive server restart
+PASS native routing available
+PASS host dimension ready 2
+PASS Minecraft snapshot 65
+PASS second moon survives server restart
+PASS moon regression complete

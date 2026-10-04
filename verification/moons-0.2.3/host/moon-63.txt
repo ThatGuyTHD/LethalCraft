@@ -1,0 +1,7 @@
+dimension=skycraft:moon_1
+block=Block{minecraft:diamond_block}
+oldMarker=Block{minecraft:air}
+registeredMoonDimensions=13
+chestCount=11
+hostCount=13 dimension=skycraft:moon_1
+guestCount=23 dimension=skycraft:moon_1
