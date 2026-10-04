@@ -65,7 +65,7 @@ internal sealed class Multiplayer : IDisposable
         {
             nextHello=Time.unscaledTime+1;
             Enqueue(NetworkManager.ServerClientId,new RelayFrame{Kind=RelayKind.Hello,Data=BitConverter.GetBytes(Protocol.Version)});
-            if(GuestWorld.Length==0&&Time.unscaledTime-started>15)Status="Waiting for host: everyone needs LethalCraft 0.2.3";
+            if(GuestWorld.Length==0&&Time.unscaledTime-started>15)Status="Waiting for host: everyone needs LethalCraft 0.2.4";
         }
         int budget=128*1024;
         while(budget>0&&outgoing.TryDequeue(out var entry))

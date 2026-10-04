@@ -10,7 +10,7 @@ namespace LethalCraftLauncher;
 
 internal sealed class SetupEngine
 {
-    public const string Version="0.2.3",BridgeJar="skycraft-0.2.3-lethalcraft.jar",ApiJar="fabric-api-0.161.0+26.3.jar";
+    public const string Version="0.2.4",BridgeJar="skycraft-0.2.4-lethalcraft.jar",ApiJar="fabric-api-0.161.0+26.3.jar";
     internal const string PrismUrl="https://github.com/PrismLauncher/PrismLauncher/releases/download/11.1.1/PrismLauncher-Windows-MinGW-w64-Portable-11.1.1.zip";
     internal const string PrismHash="05841d0b3bfc0a8212658457cc6035e1c29cd7ffae919464e874e384cbe8d062";
     internal const string JavaUrl="https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jre_x64_windows_hotspot_25.0.4.1_1.zip";

@@ -16,7 +16,6 @@ internal sealed class Controls : IDisposable
     readonly InputAction interact;
     Keyboard? textKeyboard;
     char highSurrogate;
-    int lastTextFrame=-1;
     bool nativeEClaimed;
     readonly Dictionary<ushort,float> repeatAt=new();
     public int TextCharactersSent { get; private set; }
@@ -50,13 +49,14 @@ internal sealed class Controls : IDisposable
         var current=Keyboard.current;
         if(current==textKeyboard)return;
         if(textKeyboard!=null)textKeyboard.onTextInput-=Text;
+        highSurrogate='\0';
         textKeyboard=current;
         if(textKeyboard!=null)textKeyboard.onTextInput+=Text;
     }
     void Text(char character)
     {
         if(!plugin.MinecraftMenu||(!Application.isFocused&&!SmokeTest.Active))return;
-        lastTextFrame=Time.frameCount;SendCharacter(character);
+        SendCharacter(character);
     }
     void SendCharacter(char character)
     {
@@ -71,11 +71,13 @@ internal sealed class Controls : IDisposable
         highSurrogate='\0';
         if(plugin.Link.Input(5,0,codepoint))TextCharactersSent++;
     }
-    // IMGUI receives OS text even when a keyboard was created after the plugin's Awake.
+    // Unity can deliver both IMGUI and Input System text, in either order or on different
+    // frames. Pick one source; frame-based filtering duplicates or drops valid letters.
     internal void GuiText(Event e)
     {
-        if(plugin.MinecraftMenu&&Application.isFocused&&e.type==EventType.KeyDown
-            &&e.character!=0&&lastTextFrame!=Time.frameCount)SendCharacter(e.character);
+        RefreshKeyboard();
+        if(textKeyboard==null&&plugin.MinecraftMenu&&(Application.isFocused||SmokeTest.Active)
+            &&e.type==EventType.KeyDown&&e.character!=0)SendCharacter(e.character);
     }
     internal static bool HasNativeTarget(PlayerControllerB p)
     {

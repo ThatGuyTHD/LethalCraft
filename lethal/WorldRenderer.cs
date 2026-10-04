@@ -16,6 +16,7 @@ internal sealed class WorldRenderer : IDisposable
     readonly Dictionary<uint, Texture2D> textures = new();
     readonly Dictionary<(uint, uint, uint), Material> materials = new();
     readonly GameObject avatar, scene;
+    readonly MeshRenderer avatarRenderer;
     Texture2D? overlay;
     bool overlayBottomUp;
     bool atlasDirty;
@@ -23,10 +24,14 @@ internal sealed class WorldRenderer : IDisposable
     public int SectionCount => sections.Count;
     public int TriangleCount { get; private set; }
     public bool HasOverlay => overlay != null;
+    internal bool LocalAvatarVisible => avatar.activeInHierarchy && avatarRenderer.enabled
+        && !avatarRenderer.forceRenderingOff && avatar.GetComponent<MeshFilter>().sharedMesh.vertexCount>0;
+    internal Vector3 LocalAvatarPosition => avatar.transform.position;
     public WorldRenderer()
     {
         root = new GameObject("LethalCraft world") { hideFlags = HideFlags.HideAndDontSave }; root.AddComponent<BridgeObject>(); Object.DontDestroyOnLoad(root);
         avatar = NewMesh("Minecraft player"); scene = NewMesh("Minecraft entities");
+        avatarRenderer=avatar.GetComponent<MeshRenderer>();avatarRenderer.forceRenderingOff=true;
     }
     GameObject NewMesh(string name)
     {
@@ -37,6 +42,8 @@ internal sealed class WorldRenderer : IDisposable
         return go;
     }
     public void Visible(bool visible) => root.SetActive(visible);
+    // Mesh packets may activate the object again; presentation must survive those updates.
+    public void ShowLocalAvatar(bool visible) => avatarRenderer.forceRenderingOff=!visible;
     public void PositionAvatar(PlayerState state) => avatar.transform.position = Coordinates.ToUnity(state.X,state.Y,state.Z);
 
     public void Receive(uint type, byte[] payload)

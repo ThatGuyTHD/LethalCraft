@@ -1,6 +1,6 @@
 # Distribution review
 
-Reviewed 2026-10-03; updated for 0.2.3 and the privacy rebuilds of 0.2.1/0.2.2.
+Reviewed 2026-10-03; updated for 0.2.4 and the privacy rebuilds of 0.2.1/0.2.2.
 
 - This is a free, unofficial mod. The release contains the mod, installer, open-source runtime/components, source and documentation. No paid game files or extracted assets are included.
 - Minecraft Java mods may be distributed subject to the [Minecraft EULA](https://www.minecraft.net/en-us/eula). A modded copy of the game itself may not be redistributed. Minecraft is downloaded through Prism's normal installation/account flow instead.

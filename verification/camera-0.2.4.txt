@@ -1,0 +1,104 @@
+PASS initial Minecraft ready
+PASS round 0 view 0 F5 selected
+PASS round 0 view 0 Minecraft avatar visibility
+PASS round 0 view 0 Tab selects native control
+PASS round 0 view 0 native control hides local Minecraft body
+PASS round 0 view 0 native camera position restored
+PASS round 0 view 0 native camera keeps facing direction
+PASS round 0 view 0 native camera keeps pitch
+PASS round 0 view 0 native capsule restored
+PASS round 0 view 0 incoming frames do not restore hidden avatar
+PASS round 0 view 0 Tab returns to Minecraft
+PASS round 0 view 0 F5 choice retained
+PASS round 0 view 0 native look direction retained on return
+PASS round 0 view 0 returned avatar visibility
+PASS round 0 view 0 returned avatar aligned with character
+PASS round 0 view 0 Alt temporarily restores native view
+PASS round 0 view 0 Alt camera faces native direction
+PASS round 0 view 0 Alt release returns to Minecraft
+PASS round 0 view 1 F5 selected
+PASS round 0 view 1 Minecraft avatar visibility
+PASS round 0 view 1 Tab selects native control
+PASS round 0 view 1 native control hides local Minecraft body
+PASS round 0 view 1 native camera position restored
+PASS round 0 view 1 native camera keeps facing direction
+PASS round 0 view 1 native camera keeps pitch
+PASS round 0 view 1 native capsule restored
+PASS round 0 view 1 incoming frames do not restore hidden avatar
+PASS round 0 view 1 Tab returns to Minecraft
+PASS round 0 view 1 F5 choice retained
+PASS round 0 view 1 native look direction retained on return
+PASS round 0 view 1 returned avatar visibility
+PASS round 0 view 1 returned avatar aligned with character
+PASS round 0 view 1 Alt temporarily restores native view
+PASS round 0 view 1 Alt camera faces native direction
+PASS round 0 view 1 Alt release returns to Minecraft
+PASS round 0 view 2 F5 selected
+PASS round 0 view 2 Minecraft avatar visibility
+PASS round 0 view 2 Tab selects native control
+PASS round 0 view 2 native control hides local Minecraft body
+PASS round 0 view 2 native camera position restored
+PASS round 0 view 2 native camera keeps facing direction
+PASS round 0 view 2 native camera keeps pitch
+PASS round 0 view 2 native capsule restored
+PASS round 0 view 2 incoming frames do not restore hidden avatar
+PASS round 0 view 2 Tab returns to Minecraft
+PASS round 0 view 2 F5 choice retained
+PASS round 0 view 2 native look direction retained on return
+PASS round 0 view 2 returned avatar visibility
+PASS round 0 view 2 returned avatar aligned with character
+PASS round 0 view 2 Alt temporarily restores native view
+PASS round 0 view 2 Alt camera faces native direction
+PASS round 0 view 2 Alt release returns to Minecraft
+PASS round 1 view 0 F5 selected
+PASS round 1 view 0 Minecraft avatar visibility
+PASS round 1 view 0 Tab selects native control
+PASS round 1 view 0 native control hides local Minecraft body
+PASS round 1 view 0 native camera position restored
+PASS round 1 view 0 native camera keeps facing direction
+PASS round 1 view 0 native camera keeps pitch
+PASS round 1 view 0 native capsule restored
+PASS round 1 view 0 incoming frames do not restore hidden avatar
+PASS round 1 view 0 Tab returns to Minecraft
+PASS round 1 view 0 F5 choice retained
+PASS round 1 view 0 native look direction retained on return
+PASS round 1 view 0 returned avatar visibility
+PASS round 1 view 0 returned avatar aligned with character
+PASS round 1 view 0 Alt temporarily restores native view
+PASS round 1 view 0 Alt camera faces native direction
+PASS round 1 view 0 Alt release returns to Minecraft
+PASS round 1 view 1 F5 selected
+PASS round 1 view 1 Minecraft avatar visibility
+PASS round 1 view 1 Tab selects native control
+PASS round 1 view 1 native control hides local Minecraft body
+PASS round 1 view 1 native camera position restored
+PASS round 1 view 1 native camera keeps facing direction
+PASS round 1 view 1 native camera keeps pitch
+PASS round 1 view 1 native capsule restored
+PASS round 1 view 1 incoming frames do not restore hidden avatar
+PASS round 1 view 1 Tab returns to Minecraft
+PASS round 1 view 1 F5 choice retained
+PASS round 1 view 1 native look direction retained on return
+PASS round 1 view 1 returned avatar visibility
+PASS round 1 view 1 returned avatar aligned with character
+PASS round 1 view 1 Alt temporarily restores native view
+PASS round 1 view 1 Alt camera faces native direction
+PASS round 1 view 1 Alt release returns to Minecraft
+PASS round 1 view 2 F5 selected
+PASS round 1 view 2 Minecraft avatar visibility
+PASS round 1 view 2 Tab selects native control
+PASS round 1 view 2 native control hides local Minecraft body
+PASS round 1 view 2 native camera position restored
+PASS round 1 view 2 native camera keeps facing direction
+PASS round 1 view 2 native camera keeps pitch
+PASS round 1 view 2 native capsule restored
+PASS round 1 view 2 incoming frames do not restore hidden avatar
+PASS round 1 view 2 Tab returns to Minecraft
+PASS round 1 view 2 F5 choice retained
+PASS round 1 view 2 native look direction retained on return
+PASS round 1 view 2 returned avatar visibility
+PASS round 1 view 2 returned avatar aligned with character
+PASS round 1 view 2 Alt temporarily restores native view
+PASS round 1 view 2 Alt camera faces native direction
+PASS round 1 view 2 Alt release returns to Minecraft
+Failures: 0

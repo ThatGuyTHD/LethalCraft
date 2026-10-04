@@ -1,0 +1,2 @@
+screen=ChatScreen
+text=Mississippi 0000 café

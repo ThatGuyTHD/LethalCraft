@@ -44,13 +44,15 @@ internal sealed class SmokeTest : MonoBehaviour
             else yield return MultiplayerRegression.Run(Plugin.Instance,output,guest);
             yield return new WaitForSecondsRealtime(2);Application.Quit();yield break;
         }
-        GameNetworkManager.Instance.currentSaveFileName=slots?"LethalCraft_SlotTest_A":"LethalCraft_SmokeTest";
+        bool cameraTest=Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-camera")>=0;
+        GameNetworkManager.Instance.currentSaveFileName=cameraTest?"LethalCraft_CameraTest":slots?"LethalCraft_SlotTest_A":"LethalCraft_SmokeTest";
         menu.LAN_HostSetLocal();GameNetworkManager.Instance.StartHost();Plugin.Log.LogInfo("SMOKE: starting loopback host");
         deadline=Time.realtimeSinceStartup+180;
         while((Plugin.LocalPlayer==null||!Plugin.Instance.Ready)&&Time.realtimeSinceStartup<deadline)yield return new WaitForSecondsRealtime(.2f);
         if(!Plugin.Instance.Ready){Fail("Minecraft bridge did not become ready: "+Plugin.Instance.Status);yield break;}
         yield return new WaitForSecondsRealtime(2);
         var plugin=Plugin.Instance;var player=Plugin.LocalPlayer!;Vector3 before=player.transform.position;
+        if(cameraTest){yield return CameraRegression.Run(plugin,output);yield return TextRegression.Run(plugin,output);yield return new WaitForSecondsRealtime(2);Application.Quit();yield break;}
         if(Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-combat")>=0)
         {yield return CombatRegression.Run(plugin,output);yield return new WaitForSecondsRealtime(2);Application.Quit();yield break;}
         if(slots){yield return SlotRegression.Run(plugin,output);yield return new WaitForSecondsRealtime(2);Application.Quit();yield break;}

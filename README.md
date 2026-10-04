@@ -11,7 +11,7 @@ Not affiliated with Zeekerss either.
 
 You need Windows 10/11, Lethal Company installed through Steam, and a Minecraft Java Edition account that owns the game. Both games run at the same time.
 
-1. Run `LethalCraft-Setup-0.2.3.exe` and pick your Lethal Company folder.
+1. Run `LethalCraft-Setup-0.2.4.exe` and pick your Lethal Company folder.
 2. Press **Install / Update**. It sets up the mods and downloads missing tools.
 3. Press **Minecraft account** and sign in through Prism: Settings → Accounts → Add Microsoft.
 4. Press **Play**. It starts Minecraft and opens Lethal Company through Steam. Sign in to Steam if it asks.
@@ -37,6 +37,8 @@ If Host says Steam isn't connected, quit LC, sign in to Steam and press Play aga
 | F5 | third person |
 | F7 | toggle the helmet overlay; third person always hides it |
 | F8 / F9 | toggle the bridge / diagnostics |
+
+Tab and Alt return to LC's own camera and hide your local Minecraft body. Switching back keeps the Minecraft view you picked with F5.
 
 Shields block attacks from the front after you raise them. Hits from behind still hurt. Blocking uses shield durability. TNT and native explosions do damage. Scripted monster executions and unkillable enemies still follow LC's rules.
 

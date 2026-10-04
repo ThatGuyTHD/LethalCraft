@@ -1,5 +1,16 @@
 # Test results
 
+## 0.2.4 camera switching and typing
+
+Tested locally on Windows on 2026-10-03, using an isolated save and Minecraft directory.
+
+- All 103 live camera checks passed. Two rounds covered all three F5 views, Tab and Alt, native camera position and facing direction, restored native collision, hidden local Minecraft body during native controls, and the selected F5 view and body alignment on return. Incoming mesh frames did not make the hidden body reappear. Screenshots confirmed the native view and returned front-facing Minecraft view.
+- All 16 live typing checks passed in Minecraft chat and creative item search. The fixture delivered both Unity text callbacks in either order, within one frame and across frames, and replaced the keyboard during the run. Exact Minecraft field contents matched repeated letters, numbers, accented characters and an emoji, with one bridge event per Unicode character. Closed text screens received no characters.
+- Both mods and the standalone installer built. The 19 bridge, 7 relay and 5 launcher checks passed; the unchanged Java implementation retained its passing 29-check result. All 10 installer checks passed against the final executable.
+- Installed EXE, DLL and JAR matched the release build. All 213 original save/config files matched the fresh pre-test backup after restoring fixture-modified general settings and archiving the test save. The Minecraft account file was unchanged.
+
+The live fixtures exercise game input handlers and inspect actual game state. They do not cover every physical keyboard layout or IME. Multiplayer behavior was unchanged; a two-PC Steam session was not rerun for this update. Reports are in `verification/`.
+
 ## 0.2.3 moon dimensions and intro credit
 
 Tested locally on Windows on 2026-10-03, using isolated saves.

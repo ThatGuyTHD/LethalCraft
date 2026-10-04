@@ -1,0 +1,17 @@
+PASS chat opened 0
+PASS Minecraft text snapshot 0
+PASS exact text without duplicates 0
+PASS one bridge event per Unicode character 0
+PASS text screen closed 0
+PASS chat opened 1
+PASS Minecraft text snapshot 1
+PASS exact text without duplicates 1
+PASS one bridge event per Unicode character 1
+PASS text screen closed 1
+PASS creative inventory opened
+PASS Minecraft text snapshot 2
+PASS exact text without duplicates 2
+PASS one bridge event per Unicode character 2
+PASS text screen closed 2
+PASS closed text screens do not forward characters
+Failures: 0

@@ -6,7 +6,7 @@ The installer is unsigned. Check the release's SHA-256 file against your downloa
 
 ## Versions
 
-Tested with LC Steam build 22825947 / game version 81, Unity 2022.3.62f2, BepInEx 5.4.23.5, Minecraft 26.3, Fabric Loader 0.19.5, Fabric API 0.161.0+26.3 and Java 25. Setup downloads Prism 11.1.1 and Temurin JRE 25.0.4.1+1 if needed. Protocol 16 requires matching 0.2.3 DLL and JAR versions on every PC.
+Tested with LC Steam build 22825947 / game version 81, Unity 2022.3.62f2, BepInEx 5.4.23.5, Minecraft 26.3, Fabric Loader 0.19.5, Fabric API 0.161.0+26.3 and Java 25. Setup downloads Prism 11.1.1 and Temurin JRE 25.0.4.1+1 if needed. Protocol 16 requires matching 0.2.4 DLL and JAR versions on every PC.
 
 ## Where things go
 

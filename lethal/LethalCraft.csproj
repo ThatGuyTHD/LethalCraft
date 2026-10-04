@@ -5,7 +5,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
     <AssemblyName>LethalCraft</AssemblyName>
-    <Version>0.2.3</Version>
+    <Version>0.2.4</Version>
     <GameDir Condition="'$(GameDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Lethal Company</GameDir>
     <BepInExDir Condition="'$(BepInExDir)' == ''">$(GameDir)\BepInEx</BepInExDir>
   </PropertyGroup>

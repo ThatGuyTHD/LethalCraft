@@ -12,7 +12,7 @@ using UnityEngine.InputSystem;
 
 namespace LethalCraft;
 
-[BepInPlugin("local.lethalcraft.bridge", "LethalCraft", "0.2.3")]
+[BepInPlugin("local.lethalcraft.bridge", "LethalCraft", "0.2.4")]
 [BepInProcess("Lethal Company.exe")]
 [DefaultExecutionOrder(-10000)]
 public sealed class Plugin : BaseUnityPlugin
@@ -35,7 +35,7 @@ public sealed class Plugin : BaseUnityPlugin
     Harmony patches = null!;
     PlayerControllerB? bound;
     bool enabledByUser = true, nativeMode, suspended = true, previouslyPossessed, failed, diagnostics;
-    bool savedBackground, savedArms;
+    bool savedBackground, savedArms, cameraOverridden;
     float savedHeight, savedRadius, savedFov, savedStep;
     Vector3 savedCentre, savedCameraPosition;
     readonly Dictionary<Renderer,bool> hiddenRenderers=new();
@@ -90,7 +90,7 @@ public sealed class Plugin : BaseUnityPlugin
             patches.Patch(AccessTools.Method(typeof(Landmine),"SpawnExplosion"),prefix:new HarmonyMethod(typeof(Patches),nameof(Patches.Explosion)),finalizer:new HarmonyMethod(typeof(Patches),nameof(Patches.ExplosionDone)));
             foreach(var method in new[]{AccessTools.Method(typeof(EnemyAICollisionDetect),"OnTriggerStay"),AccessTools.Method(typeof(Turret),"Update"),AccessTools.Method(typeof(ShotgunItem),"ShootGun")})
                 if(method!=null)patches.Patch(method,prefix:new HarmonyMethod(typeof(Patches),nameof(Patches.Attack)),finalizer:new HarmonyMethod(typeof(Patches),nameof(Patches.AttackDone)));
-            Logger.LogInfo("LethalCraft 0.2.3 loaded. Steam/LAN multiplayer enabled. E: interact; I: inventory; F7: mask; Tab/Alt: native controls.");
+            Logger.LogInfo("LethalCraft 0.2.4 loaded. Steam/LAN multiplayer enabled. E: interact; I: inventory; F7: mask; Tab/Alt: native controls.");
             if(Array.IndexOf(Environment.GetCommandLineArgs(),"--lethalcraft-smoke")>=0)gameObject.AddComponent<SmokeTest>();
             if(steamTesting)gameObject.AddComponent<SteamHostRegression>();
         }
@@ -166,6 +166,7 @@ public sealed class Plugin : BaseUnityPlugin
                 world.PositionAvatar(Minecraft);
             }
             world.Visible(enabledByUser&&valid&&Minecraft.InWorld&&SessionReady&&MoonReady&&playable);
+            world.ShowLocalAvatar(minecraftView&&Ready&&Minecraft.CameraMode!=0);
             Status=saves.Error.Length>0?saves.Error:Minecraft.SessionError!=0?"Minecraft connection/save failed; see Minecraft log":!enabledByUser?"Bridge off · F8 to enable":!Link.Connected?"Waiting for Minecraft":!SessionReady||!Minecraft.InWorld?(multiplayer.Role==2?multiplayer.Status:"Opening Minecraft save slot"):
                 !MoonReady?"Changing Minecraft moon dimension":native?"Lethal Company controls · Tab to switch":!Ready?"Loading collision": "Minecraft controls · E interact · I inventory · Alt: Lethal Company";
             Link.Write32(0x80,(Possessed?1u:0u)|(Ready?2u:0u)|(valid?4u:0u)|(native?8u:0u));
@@ -178,6 +179,7 @@ public sealed class Plugin : BaseUnityPlugin
     }
     void BindPlayer(PlayerControllerB p)
     {
+        cameraOverridden=false;
         var cc=p.thisController;savedHeight=cc.height;savedRadius=cc.radius;savedCentre=cc.center;savedStep=cc.stepOffset;
         savedFov=p.gameplayCamera.fieldOfView;savedCameraPosition=p.gameplayCamera.transform.localPosition;
         savedArms=p.thisPlayerModelArms.enabled;Yaw=p.gameplayCamera.transform.eulerAngles.y;Pitch=Signed(p.gameplayCamera.transform.eulerAngles.x);
@@ -200,6 +202,15 @@ public sealed class Plugin : BaseUnityPlugin
     {
         if(bound==null)return;var cc=bound.thisController;cc.height=savedHeight;cc.radius=savedRadius;cc.center=savedCentre;cc.stepOffset=savedStep;
         bound.gameplayCamera.fieldOfView=savedFov;bound.gameplayCamera.transform.localPosition=savedCameraPosition;
+        if(cameraOverridden)
+        {
+            // Front-facing F5 rotates the rendered camera by 180 degrees. Native look code
+            // preserves local yaw, so hand back the player's look direction explicitly.
+            float nativePitch=Mathf.Clamp(Pitch,-80,80);
+            bound.gameplayCamera.transform.rotation=Quaternion.Euler(nativePitch,Yaw,0);
+            AccessTools.Field(typeof(PlayerControllerB),"cameraUp").SetValue(bound,nativePitch);
+            cameraOverridden=false;
+        }
         bound.thisPlayerModelArms.enabled=savedArms;
         foreach(var pair in hiddenRenderers)if(pair.Key!=null)pair.Key.forceRenderingOff=pair.Value;
         hiddenRenderers.Clear();
@@ -238,7 +249,7 @@ public sealed class Plugin : BaseUnityPlugin
             eye+=rotation*Vector3.forward*(front?distance:-distance);
             if(front)rotation=Quaternion.Euler(-Pitch,Yaw+180,0);
         }
-        camera.transform.SetPositionAndRotation(eye,rotation);camera.fieldOfView=Mathf.Clamp(Minecraft.Fov,30,120);
+        camera.transform.SetPositionAndRotation(eye,rotation);cameraOverridden=true;camera.fieldOfView=Mathf.Clamp(Minecraft.Fov,30,120);
         p.thisPlayerModelArms.enabled=false;p.sprintMeter=1;
         foreach(var pair in hiddenRenderers)if(pair.Key!=null)pair.Key.forceRenderingOff=true;
         foreach(var pair in extraColliders)if(pair.Key!=null)pair.Key.enabled=false;
