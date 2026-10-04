@@ -11,6 +11,6 @@ Reviewed 2026-10-03; updated for 0.2.4 and the privacy rebuilds of 0.2.1/0.2.2.
 
 This is a packaging and license review, not a legal opinion or a guarantee of clearance in every jurisdiction. The software license does not override the games' terms or third-party rights.
 
-Publication status: private GitHub release while a public publisher contact address is pending. The public-sharing contact requirement is not marked complete.
+Publication status: public GitHub repository at the publisher's request. A public publisher contact address is still pending; the public-sharing contact requirement is not marked complete.
 
 The privacy audit found local build paths in older compiler metadata. Release binaries were rebuilt with debug symbols disabled and mapped build paths. The audit checks Git history, ZIP/JAR entries, compressed .NET bundle entries and embedded installer ZIP payloads; matches are reported by category and location without printing secrets. See `tools/privacy_audit.py`. An automated scan is not a guarantee against every possible kind of sensitive information.

@@ -58,7 +58,7 @@ You can't mine native LC terrain. Exterior and interior builds on one moon use t
 
 The Minecraft bridge is adapted from [chasmlol's SkyCraft](https://github.com/chasmlol/SkyCraft). LethalCraft adds the LC side, multiplayer relay and installer. The original MIT license and credits are included.
 
-Published by **ThatGuyTHD**. Public contact details are pending; this repository is private for now.
+Published by **ThatGuyTHD**.
 
 The intro includes **Made By ThatGuy** for LethalCraft. Original game and upstream mod credits remain in place.
 
